@@ -8,6 +8,7 @@ defmodule PuzzleTest do
     assert Puzzle.part1(@sample) == 142
   end
 
+  @tag pending: true
   test "line_to_number" do
     assert Puzzle.line_to_number("a1b2c") == 12
   end

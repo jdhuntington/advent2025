@@ -4,7 +4,6 @@ defmodule PuzzleTest do
 
   @sample File.read!(Path.join([__DIR__, "../priv/sample.txt"])) |> String.split("\n", trim: true)
 
-  @tag :pending
   test "part1 sample" do
     assert Puzzle.part1(@sample) == 3
   end

@@ -1,7 +1,6 @@
 defmodule Puzzle do
-  def part1(_lines) do
-    # lines |> Enum.map(&line_to_number/1) |> Enum.sum()
-    0
+  def part1(lines) do
+    lines |> Enum.map(&parse_line/1) |> ...(run |> get(the(hits)))
   end
 
   def part2(_lines) do

@@ -1,13 +1,13 @@
 defmodule Puzzle do
   def part1(lines) do
-    lines |> Enum.map(&parse_line/1) |> ...(run |> get(the(hits)))
+    lines |> Enum.map(&parse_line/1) |> run({ 50, 0}) |> elem(1)
   end
 
   def part2(_lines) do
     raise "Part 2 not implemented yet"
   end
 
-  def run(state, inputs) do
+  def run(inputs, state) do
     Enum.reduce(inputs, state, &transform/2)
   end
 

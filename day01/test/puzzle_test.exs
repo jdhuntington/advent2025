@@ -38,7 +38,6 @@ defmodule PuzzleTest do
   end
 
   test "process inputs processes a list correctly" do
-    assert Puzzle.run({99, 0}, [{:right, 1}, {:right, 2}, {:left, 1}, {:left, 1}]) ==
-             {0, 2}
+    assert Puzzle.run( [{:right, 1}, {:right, 2}, {:left, 1}, {:left, 1}],{99, 0}) == {0, 2}
   end
 end

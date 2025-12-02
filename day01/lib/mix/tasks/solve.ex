@@ -13,10 +13,11 @@ defmodule Mix.Tasks.Solve do
   def run([part]) when part in ["part1", "part2"] do
     lines = read_stdin()
 
-    result = case part do
-      "part1" -> Puzzle.part1(lines)
-      "part2" -> Puzzle.part2(lines)
-    end
+    result =
+      case part do
+        "part1" -> Puzzle.part1(lines)
+        "part2" -> Puzzle.part2(lines)
+      end
 
     IO.puts(result)
   end

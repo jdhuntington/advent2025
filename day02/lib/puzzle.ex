@@ -1,9 +1,12 @@
 defmodule Puzzle do
+  require Integer
+
   def part1(lines) do
     split_ids(Enum.at(lines, 0))
-    |> IO.inspect()
     |> Enum.map(&create_ranges/1)
-    |> IO.inspect()
+    |> Enum.map(&expand_ranges/1)
+    |> Enum.flat_map(fn val -> val end)
+    |> Enum.map(&invalid_ids/1)
   end
 
   def part2(_lines) do
@@ -17,6 +20,28 @@ defmodule Puzzle do
   def create_ranges(string_range) do
     [min, max] = String.split(string_range, "-")
     String.to_integer(min)..String.to_integer(max)
+  end
+
+  def expand_ranges(range) do
+    Enum.to_list(range)
+    |> Enum.map(&Integer.to_string/1)
+  end
+
+  def invalid_ids(range) do
+    IO.inspect(range)
+  end
+
+  def id_valid?(id) do
+    len = String.length(id)
+
+    case Integer.is_even(len) do
+      true ->
+        {a, b} = String.split_at(id, Integer.floor_div(len, 2))
+        a != b
+
+      false ->
+        true
+    end
   end
 
   def line_to_number(line) do

@@ -9,9 +9,39 @@ defmodule PuzzleTest do
     assert Puzzle.part1(@sample) == 1_227_775_554
   end
 
-  @tag pending: true
-  test "line_to_number" do
-    assert Puzzle.line_to_number("a1b2c") == 12
+  @tag focus: true
+  test "id_valid? 11" do
+    refute Puzzle.id_valid?("11")
+  end
+
+  @tag focus: true
+  test "id_valid? 55" do
+    refute Puzzle.id_valid?("55")
+  end
+
+  @tag focus: true
+  test "id_valid? 6464" do
+    refute Puzzle.id_valid?("6464")
+  end
+
+  @tag focus: true
+  test "id_valid? 123123" do
+    refute Puzzle.id_valid?("123123")
+  end
+
+  @tag focus: true
+  test "id_valid? 1221" do
+    assert Puzzle.id_valid?("1221")
+  end
+
+  @tag focus: true
+  test "id_valid? 101" do
+    assert Puzzle.id_valid?("101")
+  end
+
+  @tag focus: true
+  test "id_valid? 1188511885" do
+    refute Puzzle.id_valid?("1188511885")
   end
 
   @tag pending: true

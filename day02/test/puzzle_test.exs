@@ -38,12 +38,13 @@ defmodule PuzzleTest do
   end
 
   # ----- part two
+  @tag focus: true
   test "part2 sample" do
     assert Puzzle.part2(@sample) == 4_174_379_265
   end
 
   @tag focus: true
-  test "id2_valid" do
+  test "id2_invalid" do
     invalid_ids = [
       11,
       22,
@@ -66,7 +67,38 @@ defmodule PuzzleTest do
     end
   end
 
-  @tag pending: true
-  test "focused example" do
+  @tag focus: true
+  test "id2_valid" do
+    valid_ids = [
+      3,
+      10,
+      42,
+      0,
+      987_654_321
+    ]
+
+    for id <- valid_ids do
+      assert Puzzle.id2_valid?(Integer.to_string(id))
+    end
+  end
+
+  test "id_to_segments chunks strings" do
+    assert Puzzle.id_to_segments_of_length(1, "111") == ["1", "1", "1"]
+    assert Puzzle.id_to_segments_of_length(2, "111") == ["11", "1"]
+    assert Puzzle.id_to_segments_of_length(3, "111") == ["111"]
+  end
+
+  # @tag focus: true
+  test "all_segments_equal checks all segments are equal" do
+    assert Puzzle.all_segments_equal(["1", "1", "1"])
+    assert Puzzle.all_segments_equal(["11", "11"])
+    refute Puzzle.all_segments_equal(["00", "11"])
+    refute Puzzle.all_segments_equal(["1", "11"])
+  end
+
+  # @tag focus: true
+  test "all_segments_equal checks for more than 1 segment" do
+    refute Puzzle.all_segments_equal(["1"])
+    refute Puzzle.all_segments_equal([])
   end
 end

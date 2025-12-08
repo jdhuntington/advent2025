@@ -6,7 +6,9 @@ defmodule Puzzle do
     |> Enum.map(&create_ranges/1)
     |> Enum.map(&expand_ranges/1)
     |> Enum.flat_map(fn val -> val end)
-    |> Enum.map(&invalid_ids/1)
+    |> Enum.reject(&id_valid?/1)
+    |> Enum.map(&String.to_integer/1)
+    |> Enum.sum()
   end
 
   def part2(_lines) do
@@ -25,10 +27,6 @@ defmodule Puzzle do
   def expand_ranges(range) do
     Enum.to_list(range)
     |> Enum.map(&Integer.to_string/1)
-  end
-
-  def invalid_ids(range) do
-    IO.inspect(range)
   end
 
   def id_valid?(id) do

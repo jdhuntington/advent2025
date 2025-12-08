@@ -6,13 +6,19 @@ defmodule Puzzle do
     |> Enum.map(&create_ranges/1)
     |> Enum.map(&expand_ranges/1)
     |> Enum.flat_map(fn val -> val end)
-    |> Enum.reject(&id_valid?/1)
+    |> Enum.reject(&id1_valid?/1)
     |> Enum.map(&String.to_integer/1)
     |> Enum.sum()
   end
 
-  def part2(_lines) do
-    raise "Part 2 not implemented yet"
+  def part2(lines) do
+    split_ids(Enum.at(lines, 0))
+    |> Enum.map(&create_ranges/1)
+    |> Enum.map(&expand_ranges/1)
+    |> Enum.flat_map(fn val -> val end)
+    |> Enum.reject(&id1_valid?/1)
+    |> Enum.map(&String.to_integer/1)
+    |> Enum.sum()
   end
 
   def split_ids(lines) do
@@ -29,7 +35,20 @@ defmodule Puzzle do
     |> Enum.map(&Integer.to_string/1)
   end
 
-  def id_valid?(id) do
+  def id1_valid?(id) do
+    len = String.length(id)
+
+    case Integer.is_even(len) do
+      true ->
+        {a, b} = String.split_at(id, Integer.floor_div(len, 2))
+        a != b
+
+      false ->
+        true
+    end
+  end
+
+  def id2_valid?(id) do
     len = String.length(id)
 
     case Integer.is_even(len) do

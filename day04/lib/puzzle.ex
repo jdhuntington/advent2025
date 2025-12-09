@@ -8,41 +8,37 @@ defmodule Puzzle do
   end
 
   def count_movable_rolls(layout) do
-    # def coordinates
-    #   layout.each_y do |y|
-    #     y.each_x do |x|
-    #       yield [x,y]
+    coordinated_layout = layout |> with_coordinates()
 
-    NEXT: clean up this method
-    layout |> with_coordinates |> Enum.count()
+    coordinated_layout
+    |> Enum.count(fn %{value: value, y: y, x: x} ->
+      case value do
+        :empty ->
+          false
 
-    layout
-    |> Enum.with_index()
-    |> Enum.map(
-      fn row ->
-        {values, y} = row
-
-        values
-        |> Enum.with_index()
-        |> Enum.map(fn {value, x} ->
-          case value do
-            :empty ->
-              0
-
-            :roll ->
-              if(is_movable(layout, y, x)) do
-                1
-              else
-                0
-              end
-          end
-        end)
+        :roll ->
+          val = is_movable_for_coordinates(coordinated_layout, y, x)
+          # IO.inspect([value, x, y, val])
+          val
       end
-      |> Enum.sum()
-    )
-    |> Enum.sum()
+    end)
   end
 
+  def is_movable_for_coordinates(coordinated_layout, y, x) do
+    for x_diff <- [-1, 0, 1], y_diff <- [-1, 0, 1], !(x_diff == 0 and y_diff == 0) do
+      %{value: value} =
+        Enum.find(coordinated_layout, %{value: :empty}, fn cell ->
+          cell[:x] == x + x_diff and cell[:y] == y + y_diff
+        end)
+
+      # IO.inspect([x_diff, y_diff, diff_cell, diff_cell[:value]])
+      # diff_cell[:value] == :roll
+      value == :roll
+    end
+    |> Enum.count(fn x -> x end) < 4
+  end
+
+  ## .at(-1) wraps to end!
   def is_movable(layout, y, x) do
     Enum.sum_by([-1, 0, 1], fn y_diff ->
       Enum.count([-1, 0, 1], fn x_diff ->
@@ -55,6 +51,14 @@ defmodule Puzzle do
 
   def parse_input(input) do
     input |> Enum.map(&parse_input_line/1)
+  end
+
+  def with_coordinates(layout) do
+    ## for version
+    for {row, y} <- Enum.with_index(layout),
+        {value, x} <- Enum.with_index(row) do
+      %{value: value, y: y, x: x}
+    end
   end
 
   def parse_input_line(line) do

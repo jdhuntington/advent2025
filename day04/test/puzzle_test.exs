@@ -5,12 +5,10 @@ defmodule PuzzleTest do
 
   @sample File.read!(Path.join([__DIR__, "../priv/sample.txt"])) |> String.split("\n", trim: true)
 
-  # @tag focus: true
   test "part1 sample" do
     assert Puzzle.part1(@sample) == 13
   end
 
-  @tag focus: true
   test "count movable rows" do
     assert Puzzle.count_movable_rolls([[:empty]]) == 0
     assert Puzzle.count_movable_rolls([[:roll]]) == 1
@@ -22,6 +20,44 @@ defmodule PuzzleTest do
                [:empty, :empty, :empty],
                [:empty, :roll, :empty],
                [:empty, :empty, :empty]
+             ],
+             1,
+             1
+           )
+  end
+
+  @tag focus: true
+  test "is_movable_for_coordinates == true, basic" do
+    assert Puzzle.is_movable_for_coordinates(
+             [
+               %{value: :empty, x: 0, y: 0},
+               %{value: :empty, x: 1, y: 0},
+               %{value: :empty, x: 2, y: 0},
+               %{value: :empty, x: 0, y: 1},
+               %{value: :roll, x: 1, y: 1},
+               %{value: :empty, x: 2, y: 1},
+               %{value: :roll, x: 0, y: 2},
+               %{value: :roll, x: 1, y: 2},
+               %{value: :roll, x: 2, y: 2}
+             ],
+             1,
+             1
+           )
+  end
+
+  @tag focus: true
+  test "is_movable_for_coordinates == false, basic" do
+    refute Puzzle.is_movable_for_coordinates(
+             [
+               %{value: :empty, x: 0, y: 0},
+               %{value: :roll, x: 1, y: 0},
+               %{value: :roll, x: 2, y: 0},
+               %{value: :empty, x: 0, y: 1},
+               %{value: :roll, x: 1, y: 1},
+               %{value: :empty, x: 2, y: 1},
+               %{value: :roll, x: 0, y: 2},
+               %{value: :roll, x: 1, y: 2},
+               %{value: :roll, x: 2, y: 2}
              ],
              1,
              1
@@ -93,5 +129,25 @@ defmodule PuzzleTest do
     assert Puzzle.parse_input([".@"]) == [[:empty, :roll]]
     assert Puzzle.parse_input([".", "@"]) == [[:empty], [:roll]]
     assert Puzzle.parse_input(@sample)
+  end
+
+  test "with coordinates" do
+    layout = [
+      [:empty, :roll, :roll],
+      [:empty, :roll, :empty],
+      [:roll, :roll, :roll]
+    ]
+
+    assert Puzzle.with_coordinates(layout) == [
+             %{value: :empty, x: 0, y: 0},
+             %{value: :roll, x: 1, y: 0},
+             %{value: :roll, x: 2, y: 0},
+             %{value: :empty, x: 0, y: 1},
+             %{value: :roll, x: 1, y: 1},
+             %{value: :empty, x: 2, y: 1},
+             %{value: :roll, x: 0, y: 2},
+             %{value: :roll, x: 1, y: 2},
+             %{value: :roll, x: 2, y: 2}
+           ]
   end
 end

@@ -26,7 +26,6 @@ defmodule PuzzleTest do
            )
   end
 
-  @tag focus: true
   test "is_movable_for_coordinates == true, basic" do
     assert Puzzle.is_movable_for_coordinates(
              [
@@ -45,7 +44,6 @@ defmodule PuzzleTest do
            )
   end
 
-  @tag focus: true
   test "is_movable_for_coordinates == false, basic" do
     refute Puzzle.is_movable_for_coordinates(
              [

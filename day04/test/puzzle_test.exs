@@ -16,8 +16,30 @@ defmodule PuzzleTest do
   end
 
   @tag focus: true
-  test "next generation" do
-    refute "TODO"
+  test "next_generation, one roll - should be removed" do
+    assert Puzzle.next_generation([
+             %{value: :roll, x: 1, y: 1}
+           ]) == %{removed: 1, coordinated_layout: []}
+  end
+
+  @tag focus: true
+  test "next_generation, five rolls should not remove all" do
+    initial = [
+      [:empty, :roll, :empty],
+      [:roll, :roll, :roll],
+      [:empty, :roll, :empty]
+    ]
+
+    expected = [
+      [:empty, :empty, :empty],
+      [:empty, :roll, :empty],
+      [:empty, :empty, :empty]
+    ]
+
+    assert Puzzle.next_generation(initial |> Puzzle.with_coordinates()) == %{
+             removed: 4,
+             coordinated_layout: expected |> Puzzle.with_coordinates() |> Puzzle.without_empties()
+           }
   end
 
   test "count movable rows" do

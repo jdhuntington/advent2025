@@ -4,7 +4,38 @@ defmodule Puzzle do
   end
 
   def part2(lines) do
-    lines |> parse_input() |> count_movable_rolls()
+    lines |> parse_input() |> remove_rolls()
+  end
+
+  def remove_rolls(%{removed: 0}, accum) do
+    accum
+  end
+
+  def remove_rolls(%{removed: removed, coordinated_layout: coordinated_layout}, accum) do
+    iteration = coordinated_layout |> next_generation()
+    remove_rolls(iteration, accum + removed)
+  end
+
+  def remove_rolls(layout) do
+    layout |> with_coordinates() |> next_generation() |> remove_rolls(0)
+  end
+
+  def next_generation(coordinated_layout) do
+    original =
+      coordinated_layout
+      |> without_empties()
+
+    next_layout =
+      original
+      |> Enum.reject(fn %{y: y, x: x} ->
+        is_movable_for_coordinates(coordinated_layout, y, x)
+      end)
+
+    %{removed: length(original) - length(next_layout), coordinated_layout: next_layout}
+  end
+
+  def without_empties(coordinated_layout) do
+    Enum.reject(coordinated_layout, &(&1[:value] == :empty))
   end
 
   def count_movable_rolls(layout) do

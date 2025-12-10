@@ -1,4 +1,5 @@
 # `mix test --only focus`
+#  mix test --only focus --max-failures 1 --seed 1
 defmodule PuzzleTest do
   use ExUnit.Case, async: true
   doctest Puzzle
@@ -7,6 +8,16 @@ defmodule PuzzleTest do
 
   test "part1 sample" do
     assert Puzzle.part1(@sample) == 13
+  end
+
+  @tag focus: true
+  test "part2 sample" do
+    assert Puzzle.part2(@sample) == 43
+  end
+
+  @tag focus: true
+  test "next generation" do
+    refute "TODO"
   end
 
   test "count movable rows" do

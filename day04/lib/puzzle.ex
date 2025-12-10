@@ -3,8 +3,8 @@ defmodule Puzzle do
     lines |> parse_input() |> count_movable_rolls()
   end
 
-  def part2(_lines) do
-    raise "Part 2 not implemented yet"
+  def part2(lines) do
+    lines |> parse_input() |> count_movable_rolls()
   end
 
   def count_movable_rolls(layout) do

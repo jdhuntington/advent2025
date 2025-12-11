@@ -5,7 +5,6 @@ defmodule PuzzleTest do
 
   @sample File.read!(Path.join([__DIR__, "../priv/sample.txt"])) |> String.split("\n", trim: true)
 
-  @tag focus: true
   test "part1 sample" do
     assert Puzzle.part1(@sample) == 3
   end
@@ -15,10 +14,62 @@ defmodule PuzzleTest do
     assert Puzzle.part2(@sample) == 14
   end
 
-  # @tag focus: true
-  test "insert range into ranges" do
-    assert Puzzle.insert_range_into_ranges(Range.new(1, 3), [Range.new(1, 3)]) == [
+  @tag focus: true
+  test "merge ranges: empty" do
+    assert Puzzle.merge_ranges(Range.new(1, 3), []) == [
              Range.new(1, 3)
+           ]
+  end
+
+  @tag focus: true
+  test "merge ranges: duplicate" do
+    assert Puzzle.merge_ranges(Range.new(1, 3), [Range.new(1, 3)]) == [
+             Range.new(1, 3)
+           ]
+  end
+
+  @tag focus: true
+  test "merge ranges: only first in existing" do
+    assert Puzzle.merge_ranges(Range.new(2, 5), [Range.new(1, 3)]) == [
+             Range.new(1, 5)
+           ]
+  end
+
+  @tag focus: true
+  test "merge ranges: only last in existing" do
+    assert Puzzle.merge_ranges(Range.new(1, 3), [Range.new(2, 4)]) == [
+             Range.new(1, 4)
+           ]
+  end
+
+  @tag focus: true
+  test "merge ranges: entirely contained" do
+    assert Puzzle.merge_ranges(Range.new(2, 3), [Range.new(1, 5)]) == [
+             Range.new(1, 5)
+           ]
+  end
+
+  @tag focus: true
+  test "merge ranges: keeps adjacent (for now?)" do
+    assert Puzzle.merge_ranges(Range.new(1, 3), [Range.new(4, 6)]) == [
+             Range.new(1, 3),
+             Range.new(4, 6)
+           ]
+  end
+
+  @tag focus: true
+  test "merge ranges: no combining" do
+    assert Puzzle.merge_ranges(Range.new(1, 3), [Range.new(5, 7), Range.new(9, 10)]) == [
+             Range.new(1, 3),
+             Range.new(5, 7),
+             Range.new(9, 10)
+           ]
+  end
+
+  @tag focus: true
+  test "merge ranges: combines overlapping multiple" do
+    assert Puzzle.merge_ranges(Range.new(2, 7), [Range.new(1, 3), Range.new(5, 8)]) == [
+             Range.new(1, 8)
            ]
   end
 

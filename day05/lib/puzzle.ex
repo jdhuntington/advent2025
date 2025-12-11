@@ -33,18 +33,36 @@ defmodule Puzzle do
 
   def unique_ingredients(%{ranges: ranges, ingredients: _ingredients}) do
     ## naive, passes but slow
+    # ranges
+    # |> Enum.flat_map(fn range -> Range.to_list(range) end)
+    # |> Enum.uniq()
+    # |> Enum.count()
+
     ranges
-    |> Enum.flat_map(fn range -> Range.to_list(range) end)
-    |> Enum.uniq()
-    |> Enum.count()
+    |> Enum.reduce([], fn range, acc -> merge_ranges(range, acc) end)
+    |> Enum.sum_by(fn range -> Range.size(range) end)
   end
 
-  def insert_range_into_ranges(insertable, ranges) do
-    # find first overlapping range
-    found = ranges |> Enum.find(fn range -> !Range.disjoint?(insertable, range) end)
-    Range.new(Enum.min([insertable.first, found.first]), Enum.max([insertable.last, found.last]))
-    # combine range with overlapping
-    # ranges
+  def merge_ranges(insertable, ranges) do
+    grouped =
+      ranges
+      |> Enum.group_by(fn comparable ->
+        case Range.disjoint?(comparable, insertable) do
+          false -> :overlapping
+          true -> :disjoint
+        end
+      end)
+
+    disjoint = Map.get(grouped, :disjoint, [])
+    overlapping = Map.get(grouped, :overlapping, [])
+
+    merged_range =
+      Range.new(
+        Enum.min(Enum.map([insertable | overlapping], & &1.first)),
+        Enum.max(Enum.map([insertable | overlapping], & &1.last))
+      )
+
+    [merged_range | disjoint]
   end
 
   def check_freshness(%{ranges: ranges, ingredients: ingredients}) do

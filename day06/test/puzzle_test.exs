@@ -4,9 +4,15 @@ defmodule PuzzleTest do
   doctest Puzzle
 
   @sample File.read!(Path.join([__DIR__, "../priv/sample.txt"])) |> String.split("\n", trim: true)
+
   @tag focus: true
   test "part1 sample" do
     assert Puzzle.part1(@sample) == 4_277_556
+  end
+
+  @tag focus: true
+  test "part2 sample" do
+    assert Puzzle.part1(@sample) == 3_263_827
   end
 
   test "split_line" do

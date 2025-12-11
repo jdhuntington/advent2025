@@ -11,11 +11,21 @@ defmodule PuzzleTest do
   end
 
   @tag focus: true
+  test "part2 sample" do
+    assert Puzzle.part2(@sample) == 14
+  end
+
+  # @tag focus: true
+  test "insert range into ranges" do
+    assert Puzzle.insert_range_into_ranges(Range.new(1, 3), [Range.new(1, 3)]) == [
+             Range.new(1, 3)
+           ]
+  end
+
   test "load_ingredients" do
     assert Puzzle.load_ingredients(["1-2", "", "1"]) == %{ranges: [1..2], ingredients: [1]}
   end
 
-  @tag focus: true
   test "is_fresh?" do
     assert Puzzle.is_fresh?(5, [3..5])
     refute Puzzle.is_fresh?(6, [3..5])

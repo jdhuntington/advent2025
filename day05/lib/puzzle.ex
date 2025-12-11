@@ -3,8 +3,8 @@ defmodule Puzzle do
     lines |> load_ingredients() |> check_freshness()
   end
 
-  def part2(_lines) do
-    raise "Part 2 not implemented yet"
+  def part2(lines) do
+    lines |> load_ingredients() |> unique_ingredients()
   end
 
   def load_ingredients(lines) do
@@ -29,6 +29,22 @@ defmodule Puzzle do
       end
 
     %{ranges: ranges, ingredients: ingredients}
+  end
+
+  def unique_ingredients(%{ranges: ranges, ingredients: _ingredients}) do
+    ## naive, passes but slow
+    ranges
+    |> Enum.flat_map(fn range -> Range.to_list(range) end)
+    |> Enum.uniq()
+    |> Enum.count()
+  end
+
+  def insert_range_into_ranges(insertable, ranges) do
+    # find first overlapping range
+    found = ranges |> Enum.find(fn range -> !Range.disjoint?(insertable, range) end)
+    Range.new(Enum.min([insertable.first, found.first]), Enum.max([insertable.last, found.last]))
+    # combine range with overlapping
+    # ranges
   end
 
   def check_freshness(%{ranges: ranges, ingredients: ingredients}) do
